@@ -6,22 +6,65 @@ hardware and the APIs behave the way we expect before the real planner is built.
 
 Default robot IP is `192.168.2.9`; credentials are the stock `admin` / `admin`.
 
-## Which Python to use
+## Dependencies
 
-Two different interpreters, because the dependencies don't live together:
+Python 3.10. The arm scripts and the depth script need different packages, and
+they don't have to live in the same environment.
 
-| Script | Interpreter | Needs |
-| --- | --- | --- |
-| `kortex_hello.py`, `move_arm.py` | `~/kortex_env/bin/python` (venv) | `kortex-api` 2.8.0 |
-| `depth_cam.py` | system `python3` | `numpy`, `opencv-python`, `PyGObject` + GStreamer |
+### For `kortex_hello.py` and `move_arm.py`
 
-The venv has `kortex-api` but no numpy/cv2/gi; the system Python has
-numpy/cv2/gi but no `kortex-api`. Don't mix them up — the import error is the
-first thing that goes wrong.
+`kortex-api` is **not on PyPI** — `pip install kortex-api` will not work. The
+wheel has to be downloaded from Kinova's Artifactory server first:
+
+- **Gen3 API 2.8.0 (what these scripts use):**
+  <https://artifactory.kinovaapps.com/ui/native/generic-local-public/kortex/API/2.8.0/>
+- Python wheels, all versions:
+  <https://artifactory.kinovaapps.com/ui/repos/tree/General/pypi-local-build/Kortex/API>
+- Download links for every arm model and version are listed in the README of
+  the official repo: <https://github.com/Kinovarobotics/kortex>
+
+No login is needed. Open the folder, pick the `.whl` in the tree view on the
+left, and hit Download on the right. The file these scripts were written
+against is `kortex_api-2.8.0.post5-py3-none-any.whl`. Then install from the
+downloaded path:
 
 ```bash
-source ~/kortex_env/bin/activate     # for the two arm scripts
+python3 -m pip install ~/Downloads/kortex_api-2.8.0.post5-py3-none-any.whl
 ```
+
+It pulls in its own pinned dependencies: `protobuf>=3.5.1,<=3.20` and
+`deprecated==1.2.7`. The protobuf ceiling is strict, so this is worth keeping
+in its own virtual environment — a newer protobuf elsewhere in the environment
+will break the generated message classes.
+
+### For `depth_cam.py`
+
+Python packages:
+
+```bash
+pip install numpy opencv-python
+```
+
+Plus PyGObject and the GStreamer runtime, which come from the system package
+manager rather than pip (on Ubuntu/Debian):
+
+```bash
+sudo apt install python3-gi python3-gi-cairo \
+                 gir1.2-gstreamer-1.0 gir1.2-gst-plugins-base-1.0 \
+                 gstreamer1.0-plugins-base gstreamer1.0-plugins-good
+```
+
+`gstreamer1.0-plugins-good` is the one that provides `rtspsrc` and
+`rtpgstdepay`; `-plugins-base` provides `videoconvert` and `appsink`. If the
+pipeline fails to build, check the elements are present:
+
+```bash
+gst-inspect-1.0 rtspsrc rtpgstdepay videoconvert appsink
+```
+
+Note that `python3-gi` is only importable from the Python it was installed
+for — a virtual environment needs `--system-site-packages` (or `vext`) to see
+it.
 
 ## Scripts
 
@@ -80,3 +123,4 @@ median.
   web app at `http://192.168.2.9` first.
 - Nothing here checks for collisions or joint limits ahead of time — the robot
   is the only thing saying no. Keep the e-stop in reach.
+
