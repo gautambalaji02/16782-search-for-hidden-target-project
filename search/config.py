@@ -7,8 +7,9 @@ import os
 
 import numpy as np
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # kinova_mujoco/
-BASE_SCENE = os.path.join(ROOT, "scenes", "table_scene.xml")
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # the folder containing search/
+SIM_ROOT = os.path.join(REPO_ROOT, "kinova_mujoco")                         # robot model, scenes, assets
+BASE_SCENE = os.path.join(SIM_ROOT, "scenes", "table_scene.xml")
 BASE_SCENE_OBJECTS = ("red_cube", "green_cylinder", "blue_box")      # removed by scene_gen
 START_KEY = "table_view"            # arm keyframe each trial starts from
 

@@ -9,7 +9,7 @@ Goals alternate between
 The executor's monitor reports any arm contact or bounds violation in the real sim;
 if the planner-side checks are right, both stay at zero.
 
-Usage (from kinova_mujoco/):
+Usage (from the repository root):
   python -m search.demo_motion --seed 3              # with the viewer, real time
   python -m search.demo_motion --seed 3 --no-view --moves 50
 """

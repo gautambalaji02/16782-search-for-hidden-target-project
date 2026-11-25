@@ -27,7 +27,7 @@ How a layout is drawn:
 The robot stays first in qpos (it comes from the <include> in the base scene). Object
 free joints follow in the order: covers, then target. Use model.joint(name).qposadr.
 
-Usage (from kinova_mujoco/):
+Usage (from the repository root):
   python -m search.scene_gen --seed 3                 # print layout, open the viewer
   python -m search.scene_gen --seed 3 --no-view --save /tmp/scene3.xml
 """

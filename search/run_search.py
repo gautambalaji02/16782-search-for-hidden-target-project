@@ -15,7 +15,7 @@ Loop:
 Stops when the target is detected, no POSSIBLE cells remain, nothing is left to
 lift (what remains is permanently occluded), or --plans is reached.
 
-Usage (from kinova_mujoco/):
+Usage (from the repository root):
   python -m search.run_search --seed 3 --truth            # covered target: info-gain + lifting
   python -m search.run_search --seed 5 --planner random
   python -m search.run_search --seed 3 --no-lift          # stop when the view planner is stuck
