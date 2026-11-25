@@ -1,0 +1,35 @@
+<mujoco model="search_test">
+  <include file="../models/gen3_6dof_robotiq_2f85.xml"/>
+  <option timestep="0.002" integrator="implicitfast"/>
+  <statistic center="0.3 0 0.15" extent="1.2"/>
+  <visual><global offwidth="1280" offheight="720"/></visual>
+  <worldbody>
+    <light pos="0.45 0 2.5" dir="0 0 -1" directional="true"/>
+    <body name="table" pos="0.45 0 0">
+      <geom name="table_top" type="box" pos="0 0 -0.02" size="0.6 0.4 0.02" rgba="0.55 0.4 0.27 1"/>
+    </body>
+    <body name="cover1" pos="0.50 0.0 0.04">
+      <freejoint name="cover1_joint"/>
+      <geom name="cover1_top" type="box" size="0.05 0.05 0.0025"   pos="0 0 0.0375"   rgba=".6 .6 .7 1" mass="0.05"/>
+      <geom name="cover1_px"  type="box" size="0.0025 0.05 0.04"   pos=" 0.0475 0 0"  rgba=".6 .6 .7 1" mass="0.03"/>
+      <geom name="cover1_nx"  type="box" size="0.0025 0.05 0.04"   pos="-0.0475 0 0"  rgba=".6 .6 .7 1" mass="0.03"/>
+      <geom name="cover1_py"  type="box" size="0.045 0.0025 0.04"  pos="0  0.0475 0"  rgba=".6 .6 .7 1" mass="0.03"/>
+      <geom name="cover1_ny"  type="box" size="0.045 0.0025 0.04"  pos="0 -0.0475 0"  rgba=".6 .6 .7 1" mass="0.03"/>
+      <geom type="box" size="0.004 0.004 0.01" pos="0  0.03 0.05" rgba=".3 .3 .3 1" mass="0.005"/>
+      <geom type="box" size="0.004 0.004 0.01" pos="0 -0.03 0.05" rgba=".3 .3 .3 1" mass="0.005"/>
+      <geom name="cover1_rod" type="cylinder" fromto="0 -0.034 0.062 0 0.034 0.062" size="0.006" rgba=".3 .3 .3 1" mass="0.01"/>
+      <site name="cover1_grasp" pos="0 0 0.062" size="0.005"/>
+    </body>
+    <body name="target" pos="0.50 0.0 0.02">
+      <freejoint name="target_joint"/>
+      <geom name="target_geom" type="box" size="0.02 0.02 0.02" rgba="1 0.15 0.15 1" mass="0.05"/>
+    </body>
+  </worldbody>
+  <equality>
+    <weld name="hold_cover1" body1="g_base" body2="cover1" active="false"/>
+  </equality>
+  <keyframe>
+    <key name="table_view" qpos="0.004 0.093 -1.895 -0.001 -0.909 1.574 0 0 0 0 0 0 0 0  0.5 0 0.04 1 0 0 0  0.5 0 0.02 1 0 0 0"
+         ctrl="0.004 0.093 -1.895 -0.001 -0.909 1.574 0"/>
+  </keyframe>
+</mujoco>
